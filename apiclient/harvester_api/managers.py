@@ -455,6 +455,14 @@ class SettingManager(BaseManager):
     def get(self, name="", *, raw=False):
         return self._get(self.PATH_fmt.format(name=name))
 
+    def update(self, name, data, *,
+               raw=False, as_json=True, **kwargs):
+        path = self.PATH_fmt.format(name=name)
+        if isinstance(data, Mapping) and as_json:
+            _, node = self.get(name)
+            data = merge_dict(data, node)
+        return self._update(path, data, raw=raw, as_json=as_json, **kwargs)
+
 
 class SupportBundlemanager(BaseManager):
     PATH_fmt = ("apis/{{API_VERSION}}/namespaces/harvester-system"

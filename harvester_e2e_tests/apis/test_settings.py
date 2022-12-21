@@ -60,3 +60,14 @@ def test_get_all_settings_v110(api_client, expected_settings):
         warnings.warn(UserWarning(f"Few setting(s) been removed: {removed}."))
     if added:
         warnings.warn(UserWarning(f"New setting(s) added: {added}"))
+
+
+@pytest.mark.p0
+@pytest.mark.settings
+def test_update_log_level(api_client):
+    updates = {
+        "value": "Debug"
+    }
+    code, data = api_client.settings.update("log-level", updates)
+
+    assert 200 == code, (f"Failed to update log-level setting with error: {code}, {data}")
